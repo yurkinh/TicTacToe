@@ -73,6 +73,7 @@
     <Compile Include="Helpers\CustomEventArgs.cs" />
     <Compile Include="Extensions\AnimatorExtensions.cs" />
     <Compile Include="Extensions\TaskAnimationListener.cs" />
+    <Compile Include="Constants\IntegerConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

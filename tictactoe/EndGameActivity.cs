@@ -61,7 +61,7 @@ namespace Tictactoe
             rotation.SetDuration(1000);
             rotation.SetInterpolator(new FastOutSlowInInterpolator());
             await rotation.StartAsync();
-            StartActivity(intent);
+            Finish();
         }
 
         public override void OnBackPressed()

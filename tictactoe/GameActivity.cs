@@ -44,14 +44,11 @@ namespace Tictactoe
 
             selectedFigure = (Figures)Intent.GetIntExtra(StringConstants.FIGURE, (int)Figures.X);
 
-            // Initialize Game
-            gameLogicController = new GameLogicController(selectedFigure);
-
-            //Set text
             textViewFigure = FindViewById<TextView>(Resource.Id.textViewPlayerFigure);
             textViewPlayerTurn = FindViewById<TextView>(Resource.Id.textViewPlayerTurn);
-            textViewFigure.Text = $"You are player {selectedFigure}";
-            textViewPlayerTurn.Text = $"Waiting For {selectedFigure}";
+
+            // Initialize Game
+            InitGameBoard();
 
             //Init cells
             a1 = FindViewById<ImageButton>(Resource.Id.buttonA1);
@@ -75,7 +72,7 @@ namespace Tictactoe
             
             Glide.With(this).Load(StringConstants.X_URL);
             Glide.With(this).Load(StringConstants.O_URL);
-
+            //This is not memory leak cuase game activity is always on activity stack
             for (int y = 0; y < boardTiles.Length; y++) //row  
             {
                 for (int x = 0; x < boardTiles[y].Length; x++)//column
@@ -86,7 +83,7 @@ namespace Tictactoe
 
                     boardTiles[y][x].Click +=(o,e) =>
                     {
-                        textViewPlayerTurn.Text = $"{ StringConstants.WIAING_FOR}  {gameLogicController.GetTurn()}";
+                        textViewPlayerTurn.Text = $"{StringConstants.WIAING_FOR}  {gameLogicController.GetTurn()}";
                         Move playerMove = gameLogicController.MakeMove(tileNumberY, tileNumberX);                        
 
                         if (playerMove.Figure == Figures.X)
@@ -110,18 +107,42 @@ namespace Tictactoe
                     };
                 }
             }
-        }        
+        }
+
+        private void InitGameBoard()
+        {
+            gameLogicController = new GameLogicController(selectedFigure);
+            textViewFigure.Text = $"{StringConstants.YOU_ARE_PLAYER} {selectedFigure}";
+            textViewPlayerTurn.Text = $"{StringConstants.WIAING_FOR} {selectedFigure}";
+        }
 
         private void ToEndingScreen(string message)
         {
             Intent intent = new Intent(this, typeof(EndGameActivity));
             intent.PutExtra(StringConstants.END_MESSAGE, message);
             intent.PutExtra(StringConstants.FIGURE, (int)selectedFigure);
-            StartActivity(intent, ActivityOptions.MakeSceneTransitionAnimation(this).ToBundle());     
-            
+            StartActivityForResult(intent, IntegerConstants.RequestCode);            
         }
 
-        
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            if (requestCode == IntegerConstants.RequestCode)
+            {
+                //restart game
+                for (int y = 0; y < boardTiles.Length; y++) //row  
+                {
+                    for (int x = 0; x < boardTiles[y].Length; x++)//column
+                    {
+                        boardTiles[y][x].Enabled = true;
+                        boardTiles[y][x].SetImageDrawable(null);
+                    }
+                }
+                InitGameBoard();
+            }
+        }
+
+
         public override void OnBackPressed()
         {
 

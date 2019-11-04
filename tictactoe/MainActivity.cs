@@ -70,7 +70,7 @@ namespace Tictactoe
             await rotation.StartAsync();           
 
 
-            StartActivity(intent, ActivityOptions.MakeSceneTransitionAnimation(this).ToBundle());
+            StartActivity(intent);
             Finish();
         }
     }
