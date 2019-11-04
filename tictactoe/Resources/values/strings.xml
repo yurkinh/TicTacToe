@@ -9,4 +9,7 @@
     <string name="HasWonGame">has won the game</string>
     <string name="Options">Options</string>
     <string name="Restart">Restart</string>
+    <string name="facebook_app_id">615471295656622</string>
+    <string name="facebook_share_button">Share</string>
+
 </resources>

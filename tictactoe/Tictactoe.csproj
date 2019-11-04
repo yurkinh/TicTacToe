@@ -142,6 +142,10 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\xml\network_security_config.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -153,6 +157,7 @@
     <Folder Include="Resources\values\" />
     <Folder Include="Resources\values-v21\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Resources\xml\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
@@ -184,6 +189,9 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v4">
       <Version>28.0.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Facebook.Share.Android">
+      <Version>5.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

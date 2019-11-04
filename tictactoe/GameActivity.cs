@@ -1,22 +1,13 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Support.V4.Content;
 using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
 using Bumptech.Glide;
 using Tictactoe.Constants;
 using Tictactoe.Controllers;
 using Tictactoe.Enums;
-using Tictactoe.Helpers;
 using Tictactoe.Models;
 
 namespace Tictactoe
@@ -34,8 +25,7 @@ namespace Tictactoe
         Figures selectedFigure;
 
         TextView textViewFigure;
-        TextView textViewPlayerTurn;       
-
+        TextView textViewPlayerTurn;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -46,7 +36,6 @@ namespace Tictactoe
 
             textViewFigure = FindViewById<TextView>(Resource.Id.textViewPlayerFigure);
             textViewPlayerTurn = FindViewById<TextView>(Resource.Id.textViewPlayerTurn);
-
             // Initialize Game
             InitGameBoard();
 
@@ -70,8 +59,9 @@ namespace Tictactoe
 
             //PreDownload images into cache
             
-            Glide.With(this).Load(StringConstants.X_URL);
-            Glide.With(this).Load(StringConstants.O_URL);
+            //Glide.With(this).Load(StringConstants.X_URL);
+            //Glide.With(this).Load(StringConstants.O_URL);            
+
             //This is not memory leak cuase game activity is always on activity stack
             for (int y = 0; y < boardTiles.Length; y++) //row  
             {
@@ -129,19 +119,14 @@ namespace Tictactoe
             base.OnActivityResult(requestCode, resultCode, data);
             if (requestCode == IntegerConstants.RequestCode)
             {
-                //restart game
-                for (int y = 0; y < boardTiles.Length; y++) //row  
+                foreach (var button in allButtons)
                 {
-                    for (int x = 0; x < boardTiles[y].Length; x++)//column
-                    {
-                        boardTiles[y][x].Enabled = true;
-                        boardTiles[y][x].SetImageDrawable(null);
-                    }
+                    button.Enabled = true;
+                    button.SetImageDrawable(null);
                 }
                 InitGameBoard();
             }
         }
-
 
         public override void OnBackPressed()
         {

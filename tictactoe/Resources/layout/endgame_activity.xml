@@ -16,7 +16,7 @@
 		android:layout_gravity="center_horizontal"
 		android:layout_weight="2"
 		android:scaleType="fitEnd"
-		app:lottie_autoPlay="true"		
+		app:lottie_autoPlay="true"
 		app:lottie_fileName="fireworks.json"
 		app:lottie_loop="true" />
 
@@ -66,5 +66,13 @@
 			android:layout_marginTop="20dp"
 			android:gravity="center"
 			android:text="@string/Restart" />
+
+		<com.facebook.share.widget.ShareButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+			android:id="@+id/fb_share_button"
+			android:text="@string/facebook_share_button"
+			android:textAllCaps="true"/>
 	</LinearLayout>
 </LinearLayout>
