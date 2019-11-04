@@ -6,6 +6,10 @@ using Android.Widget;
 using Android.Content;
 using Tictactoe.Constants;
 using Tictactoe.Enums;
+using Android.Views.Animations;
+using Android.Animation;
+using Tictactoe.Extensions;
+using Android.Support.V4.View.Animation;
 
 namespace Tictactoe
 {
@@ -42,19 +46,29 @@ namespace Tictactoe
             buttonStartGameO.Click -= StartGameHandler;
         }
 
-        private void StartGameHandler(object sender, System.EventArgs e)
+        private async void StartGameHandler(object sender, System.EventArgs e)
         {
             var btn = sender as Button;
             Intent intent = new Intent(this, typeof(GameActivity));
+            ObjectAnimator rotation;
 
             if (btn.Text == Resources.GetString(Resource.String.startGameX))
             {
                 intent.PutExtra(StringConstants.FIGURE, (int)Figures.X);
+                rotation = ObjectAnimator.OfFloat(buttonStartGameX, "RotationY", 0f, 360f);
             }
             else
             {
+                rotation = ObjectAnimator.OfFloat(buttonStartGameO, "RotationY", 0f, 360f);
                 intent.PutExtra(StringConstants.FIGURE, (int)Figures.O);
             }
+
+            
+            //Animate buttons
+            rotation.SetDuration(1000);
+            rotation.SetInterpolator(new FastOutSlowInInterpolator());
+            await rotation.StartAsync();           
+
 
             StartActivity(intent, ActivityOptions.MakeSceneTransitionAnimation(this).ToBundle());
             Finish();

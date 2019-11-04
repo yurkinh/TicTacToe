@@ -3,15 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Android.Animation;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V4.View.Animation;
 using Android.Views;
+using Android.Views.Animations;
 using Android.Widget;
 using Tictactoe.Constants;
 using Tictactoe.Enums;
+using Tictactoe.Extensions;
 
 namespace Tictactoe
 {
@@ -49,10 +52,15 @@ namespace Tictactoe
             buttonRestart.Click -= ButtonRestartClickHandler;
         }
 
-        private void ButtonRestartClickHandler(object sender, EventArgs e)
+        private async void ButtonRestartClickHandler(object sender, EventArgs e)
         {
             Intent intent = new Intent(this, typeof(GameActivity));
             intent.PutExtra(StringConstants.FIGURE, (int)figure);
+            //Animate button
+            var rotation = ObjectAnimator.OfFloat(buttonRestart, "RotationX", 0f, 360f);
+            rotation.SetDuration(1000);
+            rotation.SetInterpolator(new FastOutSlowInInterpolator());
+            await rotation.StartAsync();
             StartActivity(intent);
         }
 
