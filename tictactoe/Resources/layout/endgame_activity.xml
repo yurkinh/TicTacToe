@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:weightSum="12"
+	android:background="@color/background_light">
+
+	<com.airbnb.lottie.LottieAnimationView
+		android:id="@+id/animation_view_ending"
+		android:layout_width="200dp"
+		android:layout_height="200dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_weight="2"
+		android:scaleType="fitEnd"
+		app:lottie_autoPlay="true"		
+		app:lottie_fileName="fireworks.json"
+		app:lottie_loop="true" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:gravity="center"
+		android:layout_weight="4">
+
+		<TextView
+			android:id="@+id/TextViewCongratulations"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:fontFamily="@font/product_sans_bold"
+			android:textSize="36sp"
+			android:textColor="@color/text_color"
+			android:text="@string/Congratulations" />
+
+		<TextView
+			android:id="@+id/TextViewWinnerName"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="12dp"
+			android:layout_marginBottom="12dp"
+			android:fontFamily="@font/product_sans_regular"
+			android:gravity="center"
+			android:textColor="@color/text_color"
+			android:textSize="24sp"/>
+
+		<TextView
+			android:id="@+id/TextViewWinner"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textColor="@color/text_color"
+			android:textSize="24sp"
+			android:fontFamily="@font/product_sans_regular"
+			android:text="@string/HasWonGame"/>
+
+		<Button
+			style="@style/Button"
+			android:id="@+id/RestartButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="20dp"
+			android:gravity="center"
+			android:text="@string/Restart" />
+	</LinearLayout>
+</LinearLayout>

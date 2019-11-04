@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    android:weightSum="12">
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/TitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:layout_gravity="center"
+        android:gravity="bottom|center"
+        android:layout_weight="3"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/blue"
+        app:lottie_fileName="xamarin-animation.json"
+        app:lottie_loop="true"
+        android:layout_gravity="center_horizontal"
+        android:foregroundGravity="center"
+        android:layout_weight="3"/>    
+
+    <LinearLayout
+        android:id="@+id/MenuButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="6">
+
+        <Button style="@style/Button"
+            android:id="@+id/buttonStartGameX"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="16dp"
+            android:text="@string/startGameX" />
+
+        <Button style="@style/Button"
+            android:id="@+id/buttonStartGameO"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="16dp"
+            android:text="@string/startGameO" />
+        
+    </LinearLayout>
+</LinearLayout>
