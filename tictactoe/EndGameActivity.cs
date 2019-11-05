@@ -3,6 +3,7 @@ using System;
 using Android.Animation;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.View.Animation;
 using Android.Widget;
@@ -14,7 +15,7 @@ using Xamarin.Facebook.Share.Widget;
 
 namespace Tictactoe
 {
-    [Activity(Label = "EndGameActivity")]
+    [Activity(Label = "EndGameActivity", Theme = "@style/AppTheme", ScreenOrientation = ScreenOrientation.Portrait)]
     public class EndGameActivity : Activity
     {
         TextView textViewWinnerName;

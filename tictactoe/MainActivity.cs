@@ -1,19 +1,18 @@
 ﻿using Android.App;
 using Android.OS;
 using Android.Support.V7.App;
-using Android.Runtime;
 using Android.Widget;
 using Android.Content;
 using Tictactoe.Constants;
 using Tictactoe.Enums;
-using Android.Views.Animations;
 using Android.Animation;
 using Tictactoe.Extensions;
 using Android.Support.V4.View.Animation;
+using Android.Content.PM;
 
 namespace Tictactoe
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme")]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : AppCompatActivity
     {
         Button buttonStartGameX;

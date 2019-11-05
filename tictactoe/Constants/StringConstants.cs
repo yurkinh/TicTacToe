@@ -10,7 +10,7 @@
         public const string O_URL = "http://d.michd.me/aa-lab/o_mark.png";
         public const string TTT_SETTINGS = "TIC_TC_TOE_SETTINGS";
         public const string GAME_STATE = "Game_State";
-        public const string INIT_FROM_STATE = "Game_State";
+        public const string INIT_FROM_STATE = "Init_from_game_State";
         public const string DRAW = "A Draw. Nobody";
     }
 }

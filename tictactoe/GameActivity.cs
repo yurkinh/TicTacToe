@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
+using Android.Gms.Ads;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.App;
@@ -15,7 +17,7 @@ using Utf8Json;
 
 namespace Tictactoe
 {
-    [Activity(Label = "GameActivity")]
+    [Activity(Label = "GameActivity", Theme = "@style/AppTheme", ScreenOrientation = ScreenOrientation.Portrait)]
     public class GameActivity : AppCompatActivity
     {
         ImageButton a1, a2, a3;
@@ -29,13 +31,14 @@ namespace Tictactoe
         TextView textViewFigure;
         TextView textViewPlayerTurn;
         Dictionary<int, int> gameState = new Dictionary<int, int>();
-        bool isGameEnded;
+        AdView adView;
 
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.game_activity);
+            //MobileAds.Initialize(this, "ca-app-pub-8471384010278314~5446313310");
+            SetContentView(Resource.Layout.game_activity);            
 
             textViewFigure = FindViewById<TextView>(Resource.Id.textViewPlayerFigure);
             textViewPlayerTurn = FindViewById<TextView>(Resource.Id.textViewPlayerTurn);
@@ -50,6 +53,11 @@ namespace Tictactoe
             c1 = FindViewById<ImageButton>(Resource.Id.buttonC1);
             c2 = FindViewById<ImageButton>(Resource.Id.buttonC2);
             c3 = FindViewById<ImageButton>(Resource.Id.buttonC3);
+
+            //Add init
+            adView = FindViewById<AdView>(Resource.Id.adView);            
+            var adRequest = new AdRequest.Builder().Build();
+            adView.LoadAd(adRequest);
 
             //Init rows
             rowA = new[] { a1, a2, a3 };
@@ -99,8 +107,7 @@ namespace Tictactoe
                          boardTiles[playerMove.Y][playerMove.X].Enabled = false;
 
                          if (playerMove.IsEndingMove())
-                         {
-                             isGameEnded = true;
+                         {                             
                              gameState.Clear();
                              Settings.Set(StringConstants.GAME_STATE, JsonSerializer.ToJsonString(gameState));
                              ToEndingScreen(playerMove.EndingMessage);
@@ -132,8 +139,7 @@ namespace Tictactoe
         }
 
         private void InitGameBoard(bool initFromState = false)
-        {
-            isGameEnded = false;
+        {            
             gameLogicController = new GameLogicController(selectedFigure);
             textViewFigure.Text = $"{StringConstants.YOU_ARE_PLAYER} {selectedFigure}";
             textViewPlayerTurn.Text = $"{selectedFigure}{StringConstants.TURN}";
