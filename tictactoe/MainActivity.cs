@@ -13,7 +13,7 @@ using Android.Support.V4.View.Animation;
 
 namespace Tictactoe
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme")]
     public class MainActivity : AppCompatActivity
     {
         Button buttonStartGameX;

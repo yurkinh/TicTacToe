@@ -1,4 +1,4 @@
-<resources>
+<resources>    
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:fontFamily">@font/product_sans_bold</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -42,4 +42,13 @@
         <item name="android:textSize">80sp</item>
         <item name="android:background">@color/background_light</item>
     </style>
+
+    <style name="MyTheme.Splash" parent ="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowNoTitle">true</item>  
+        <item name="android:windowFullscreen">true</item>  
+        <item name="android:windowContentOverlay">@null</item>  
+        <item name="android:windowActionBar">true</item>  
+  </style>
+
 </resources>

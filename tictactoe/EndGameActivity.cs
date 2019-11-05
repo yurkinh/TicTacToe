@@ -1,21 +1,14 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Android.Animation;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V4.View.Animation;
-using Android.Views;
-using Android.Views.Animations;
 using Android.Widget;
 using Tictactoe.Constants;
 using Tictactoe.Enums;
 using Tictactoe.Extensions;
-using Xamarin.Facebook;
 using Xamarin.Facebook.Share.Model;
 using Xamarin.Facebook.Share.Widget;
 
@@ -46,8 +39,8 @@ namespace Tictactoe
             //Share content to FB
             ShareLinkContent.Builder builder = new ShareLinkContent.Builder();
             builder.SetContentUrl(Android.Net.Uri.Parse("DI.FM"));
-            ShareContent conent = builder.Build();
-            shareButton.ShareContent = conent;            
+            ShareContent content = builder.Build();
+            shareButton.ShareContent = content;            
         }
 
         protected override void OnResume()
@@ -71,6 +64,7 @@ namespace Tictactoe
             rotation.SetDuration(1000);
             rotation.SetInterpolator(new FastOutSlowInInterpolator());
             await rotation.StartAsync();
+
             Finish();
         }
 

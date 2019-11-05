@@ -2,11 +2,15 @@
 {
     public static class StringConstants
     {
-        public static readonly string FIGURE = "Figure";
-        public static readonly string END_MESSAGE = "EndMessage";
-        public static readonly string WIAING_FOR = "Waiting For";
-        public static readonly string YOU_ARE_PLAYER = "You are player";
-        public static readonly string X_URL = "http://d.michd.me/aa-lab/x_mark.png";
-        public static readonly string O_URL = "http://d.michd.me/aa-lab/o_mark.png";        
+        public const string FIGURE = "Figure";
+        public const string END_MESSAGE = "EndMessage";
+        public const string TURN = "'s turn";
+        public const string YOU_ARE_PLAYER = "You are player";
+        public const string X_URL = "http://d.michd.me/aa-lab/x_mark.png";
+        public const string O_URL = "http://d.michd.me/aa-lab/o_mark.png";
+        public const string TTT_SETTINGS = "TIC_TC_TOE_SETTINGS";
+        public const string GAME_STATE = "Game_State";
+        public const string INIT_FROM_STATE = "Game_State";
+        public const string DRAW = "A Draw. Nobody";
     }
 }

@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System.Collections.Generic;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -8,7 +9,9 @@ using Bumptech.Glide;
 using Tictactoe.Constants;
 using Tictactoe.Controllers;
 using Tictactoe.Enums;
+using Tictactoe.Helpers;
 using Tictactoe.Models;
+using Utf8Json;
 
 namespace Tictactoe
 {
@@ -23,21 +26,19 @@ namespace Tictactoe
         ImageButton[] allButtons;
         GameLogicController gameLogicController;
         Figures selectedFigure;
-
         TextView textViewFigure;
         TextView textViewPlayerTurn;
+        Dictionary<int, int> gameState = new Dictionary<int, int>();
+        bool isGameEnded;
+
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.game_activity);
 
-            selectedFigure = (Figures)Intent.GetIntExtra(StringConstants.FIGURE, (int)Figures.X);
-
             textViewFigure = FindViewById<TextView>(Resource.Id.textViewPlayerFigure);
             textViewPlayerTurn = FindViewById<TextView>(Resource.Id.textViewPlayerTurn);
-            // Initialize Game
-            InitGameBoard();
 
             //Init cells
             a1 = FindViewById<ImageButton>(Resource.Id.buttonA1);
@@ -57,53 +58,108 @@ namespace Tictactoe
             boardTiles = new ImageButton[][] { rowA, rowB, rowC };
             allButtons = new[] { a1, a2, a3, b1, b2, b3, c1, c2, c3 };
 
-            //PreDownload images into cache
-            
-            //Glide.With(this).Load(StringConstants.X_URL);
-            //Glide.With(this).Load(StringConstants.O_URL);            
+            // Initialize Game
+            selectedFigure = (Figures)Intent.GetIntExtra(StringConstants.FIGURE, (int)Figures.X);
+            Settings.Set(StringConstants.FIGURE, (int)selectedFigure);
 
             //This is not memory leak cuase game activity is always on activity stack
             for (int y = 0; y < boardTiles.Length; y++) //row  
             {
                 for (int x = 0; x < boardTiles[y].Length; x++)//column
                 {
-                    // Remember To Makes Changes To Button
                     int tileNumberY = y;
                     int tileNumberX = x;
+                    boardTiles[y][x].Click += (o, e) =>
+                     {
+                         textViewPlayerTurn.Text = $"{gameLogicController.GetTurn()}{StringConstants.TURN}";
+                         Move playerMove = gameLogicController.MakeMove(tileNumberY, tileNumberX);
 
-                    boardTiles[y][x].Click +=(o,e) =>
-                    {
-                        textViewPlayerTurn.Text = $"{StringConstants.WIAING_FOR}  {gameLogicController.GetTurn()}";
-                        Move playerMove = gameLogicController.MakeMove(tileNumberY, tileNumberX);                        
-
-                        if (playerMove.Figure == Figures.X)
-                        {
+                         if (playerMove.Figure == Figures.X)
+                         {
                             //Get X image from cache and set to ImageButton
-                            Glide.With(this).Load(StringConstants.X_URL).Into(boardTiles[playerMove.Y][playerMove.X]);                            
-                        }
-                        else
-                        {
+                            Glide.With(this).Load(StringConstants.X_URL).Into(boardTiles[playerMove.Y][playerMove.X]);
+
+                            //Add current gamestate to array
+                            gameState.Add(boardTiles[playerMove.Y][playerMove.X].Id, (int)Figures.X);                             
+                         }
+                         else
+                         {
                             //Get O image from cache and set to ImageButton                           
-                            Glide.With(this).Load(StringConstants.O_URL).Into(boardTiles[playerMove.Y][playerMove.X]);                            
-                        }
+                            Glide.With(this).Load(StringConstants.O_URL).Into(boardTiles[playerMove.Y][playerMove.X]);
 
-                        boardTiles[playerMove.Y][playerMove.X].Enabled = false;
+                            //Add current gamestate to array
+                            gameState.Add(boardTiles[playerMove.Y][playerMove.X].Id, (int)Figures.O);
 
-                        if (playerMove.IsEndingMove())
-                        {
-                            ToEndingScreen(playerMove.EndingMessage);
-                            return;
-                        }
-                    };
+                             
+                         }
+                         //Save gamestate to persistent storage
+                         //Not the best and most performant way but for small amout of data it is ok
+                         // It could be replaced with SQLite or some other persistent storage
+                         Settings.Set(StringConstants.GAME_STATE, JsonSerializer.ToJsonString(gameState));
+                         boardTiles[playerMove.Y][playerMove.X].Enabled = false;
+
+                         if (playerMove.IsEndingMove())
+                         {
+                             isGameEnded = true;
+                             gameState.Clear();
+                             Settings.Set(StringConstants.GAME_STATE, JsonSerializer.ToJsonString(gameState));
+                             ToEndingScreen(playerMove.EndingMessage);
+                             return;
+                         }
+                     };
                 }
+            }
+
+            bool initFromState = Intent.GetBooleanExtra(StringConstants.INIT_FROM_STATE, false);
+            InitGameBoard(initFromState);
+        }        
+
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            if (requestCode == IntegerConstants.REQUEST_CODE)
+            {
+                gameState.Clear();
+                foreach (var button in allButtons)
+                {
+                    button.Enabled = true;
+                    button.SetImageDrawable(null);
+                }                
+                
+                InitGameBoard();
+                Settings.Set(StringConstants.GAME_STATE, JsonSerializer.ToJsonString(gameState));
             }
         }
 
-        private void InitGameBoard()
+        private void InitGameBoard(bool initFromState = false)
         {
+            isGameEnded = false;
             gameLogicController = new GameLogicController(selectedFigure);
             textViewFigure.Text = $"{StringConstants.YOU_ARE_PLAYER} {selectedFigure}";
-            textViewPlayerTurn.Text = $"{StringConstants.WIAING_FOR} {selectedFigure}";
+            textViewPlayerTurn.Text = $"{selectedFigure}{StringConstants.TURN}";
+
+            //Restore game from saved state
+            if (initFromState)
+            {
+                string gameStateJson = Settings.Get(StringConstants.GAME_STATE, string.Empty);                
+                gameState = JsonSerializer.Deserialize<Dictionary<int, int>>(gameStateJson);
+
+                for (int y = 0; y < boardTiles.Length; y++) //row  
+                {
+                    for (int x = 0; x < boardTiles[y].Length; x++)//column
+                    {                      
+                        
+                        if (gameState.ContainsKey(boardTiles[y][x].Id))
+                        {
+                            textViewPlayerTurn.Text = $"{gameLogicController.GetTurn()}{StringConstants.TURN}";
+                            Move playerMove = gameLogicController.MakeMove(y, x);
+                            Glide.With(this).Load(playerMove.Figure == Figures.X ? StringConstants.X_URL : StringConstants.O_URL).Into(boardTiles[playerMove.Y][playerMove.X]);
+                            boardTiles[y][x].Enabled = false;                            
+                        }
+                    }
+                }
+
+            }
         }
 
         private void ToEndingScreen(string message)
@@ -111,26 +167,13 @@ namespace Tictactoe
             Intent intent = new Intent(this, typeof(EndGameActivity));
             intent.PutExtra(StringConstants.END_MESSAGE, message);
             intent.PutExtra(StringConstants.FIGURE, (int)selectedFigure);
-            StartActivityForResult(intent, IntegerConstants.RequestCode);            
-        }
-
-        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
-        {
-            base.OnActivityResult(requestCode, resultCode, data);
-            if (requestCode == IntegerConstants.RequestCode)
-            {
-                foreach (var button in allButtons)
-                {
-                    button.Enabled = true;
-                    button.SetImageDrawable(null);
-                }
-                InitGameBoard();
-            }
+            StartActivityForResult(intent, IntegerConstants.REQUEST_CODE);
         }
 
         public override void OnBackPressed()
         {
-
+            //prevent back button press
         }
+        
     }
 }

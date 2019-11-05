@@ -1,12 +1,12 @@
-﻿using Tictactoe.Enums;
+﻿using Tictactoe.Constants;
+using Tictactoe.Enums;
 using Tictactoe.Models;
 
 namespace Tictactoe.Controllers
 {
     public class GameLogicController
-    {         
-        
-        Board board = new Board();
+    {
+        readonly Board board = new Board();
         Figures turn;
         int turnCount = 1;
 
@@ -31,9 +31,9 @@ namespace Tictactoe.Controllers
             {
                 move.SetEndingMove(turn.ToString());
             }
-            else if (turnCount >= 9)
+            else if (turnCount >= IntegerConstants.MAX_TURN)
             {
-                move.SetEndingMove("The Game Ended In A Tie");
+                move.SetEndingMove(StringConstants.DRAW);
             }
             else NextTurn();
             return move;

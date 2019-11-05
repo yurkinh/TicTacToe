@@ -1,4 +1,5 @@
-﻿using Tictactoe.Enums;
+﻿using Tictactoe.Constants;
+using Tictactoe.Enums;
 
 namespace Tictactoe.Models
 {
@@ -8,11 +9,11 @@ namespace Tictactoe.Models
 
         public Board()
         {
-            board = new Figures[3,3];
+            board = new Figures[IntegerConstants.BOARD_SIZE, IntegerConstants.BOARD_SIZE];
             IsGameOver = false;
             
-            for (int y = 0; y < 3; y++)
-              for (int x = 0; x < 3; x++)
+            for (int y = 0; y < IntegerConstants.BOARD_SIZE; y++)
+              for (int x = 0; x < IntegerConstants.BOARD_SIZE; x++)
                     board[y,x] = Figures.Blank;
         }
         
@@ -38,7 +39,7 @@ namespace Tictactoe.Models
             int column = 0;
             int row = 0;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < IntegerConstants.BOARD_SIZE; i++)
             {
                 // check column
                 if (board[i,move.X] == move.Figure)
@@ -54,7 +55,7 @@ namespace Tictactoe.Models
             }
 
             // validate row & column
-            if (column == 3 || row == 3)
+            if (column == IntegerConstants.BOARD_SIZE || row == IntegerConstants.BOARD_SIZE)
             {
                 IsGameOver = true;
                 return true;
